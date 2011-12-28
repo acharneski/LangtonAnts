@@ -18,6 +18,14 @@ public class GwtAntFarm extends AntFarm
   public Point set(Point p, byte b)
   {
     p = super.set(p, b);
+    if(((byte)0) == b)
+    {
+      context2d.setFillStyle("white");
+    }
+    else
+    {
+      context2d.setFillStyle("black");
+    }
     context2d.fillRect(p.x, p.y, 1, 1);
     return p;
   }

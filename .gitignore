@@ -3,3 +3,5 @@ bin/
 gwt-unitCache/
 test-classes/
 classes/
+deploy/
+*.cache.*

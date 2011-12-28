@@ -14,8 +14,8 @@ public class TestAnt
     final AwtAntFarm farm = new AwtAntFarm(frame);
     Random random = new Random();
     farm.add(new Ant((int) (farm.width * random.nextDouble()), (int) (farm.height * random.nextDouble())));
-    farm.add(new Ant((int) (farm.width * random.nextDouble()), (int) (farm.height * random.nextDouble())));
-    farm.add(new Ant((int) (farm.width * random.nextDouble()), (int) (farm.height * random.nextDouble())));
+    //farm.add(new Ant((int) (farm.width * random.nextDouble()), (int) (farm.height * random.nextDouble())));
+    //farm.add(new Ant((int) (farm.width * random.nextDouble()), (int) (farm.height * random.nextDouble())));
     frame.setSize(800, 600);
     frame.setVisible(true);
     new Thread(farm).start();

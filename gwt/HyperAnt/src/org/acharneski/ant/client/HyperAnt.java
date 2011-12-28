@@ -14,9 +14,10 @@ import com.google.gwt.user.client.ui.RootPanel;
 public class HyperAnt implements EntryPoint
 {
   private Canvas canvas;
-  String holderId = "ants";
-  int width = 800;
-  int height = 600;
+  final String holderId = "ants";
+  final int width = 800;
+  final int height = 600;
+  final Random random = new Random();
 
   /**
    * This is the entry point method.
@@ -30,16 +31,12 @@ public class HyperAnt implements EntryPoint
       RootPanel.get(holderId).add(new Label("Canvas not supported"));
       return;
     }
-
-    final AntFarm farm = new GwtAntFarm(canvas.getContext2d());
-
     canvas.setWidth(width + "px");
     canvas.setHeight(height + "px");
     canvas.setCoordinateSpaceWidth(width);
     canvas.setCoordinateSpaceHeight(height);
     RootPanel.get(holderId).add(canvas);
-    Random random = new Random();
-    farm.add(new Ant((int) (farm.width * random.nextDouble()), (int) (farm.height * random.nextDouble())));
+    final AntFarm farm = createAntFarm();
     new Timer()
     {
       int stepSize = 100;
@@ -56,6 +53,12 @@ public class HyperAnt implements EntryPoint
         stepSize *= targetTime / time;
       }
     }.scheduleRepeating(10);
+  }
 
+  private AntFarm createAntFarm()
+  {
+    final AntFarm farm = new GwtAntFarm(canvas.getContext2d());
+    farm.add(new Ant((int) (farm.width * random.nextDouble()), (int) (farm.height * random.nextDouble())));
+    return farm;
   }
 }
