@@ -4,9 +4,9 @@ package org.acharneski.ant.client;
 public class Ant
 {
 
-  private Direction orientation;
+  protected Orientation orientation;
   private AntFarm farm;
-  private Point point;
+  protected Point point;
   
   public static class Point
   {
@@ -18,7 +18,7 @@ public class Ant
       this.x = x;
       this.y = y;
     }
-    public Point add(Direction d){
+    public Point add(Orientation d){
       return new Point(x + d.dx, y + d.dy);
     }
     public Point mod(int width, int height)
@@ -31,7 +31,7 @@ public class Ant
     }
   }
   
-  public enum Direction
+  public enum Orientation
   {
     Up(0,1),
     Down(0,-1),
@@ -40,27 +40,27 @@ public class Ant
     public final int dx;
     public final int dy;
     
-    public static Direction find(int dx, int dy)
+    public static Orientation find(int dx, int dy)
     {
-      for(Direction d : Direction.values())
+      for(Orientation d : Orientation.values())
       {
         if(d.dx == dx && d.dy == dy) return d;
       }
       return null;
     }
 
-    private Direction(int dx, int dy)
+    private Orientation(int dx, int dy)
     {
       this.dx = dx;
       this.dy = dy;
     }
 
-    public Direction clockwise()
+    public Orientation clockwise()
     {
       return find(dy, -dx);
     }
     
-    public Direction counterClockwise()
+    public Orientation counterClockwise()
     {
       return find(-dy, dx);
     }
@@ -69,7 +69,7 @@ public class Ant
   public Ant(int x, int y)
   {
     this.setPoint(new Point(x,y));
-    this.setOrientation(Direction.Down);
+    this.setOrientation(Orientation.Down);
   }
 
   public void step()
@@ -87,12 +87,12 @@ public class Ant
     point = point.add(orientation);
   }
 
-  public Direction getOrientation()
+  public Orientation getOrientation()
   {
     return orientation;
   }
 
-  public void setOrientation(Direction orientation)
+  public void setOrientation(Orientation orientation)
   {
     this.orientation = orientation;
   }

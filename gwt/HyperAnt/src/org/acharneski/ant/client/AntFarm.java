@@ -1,6 +1,7 @@
 package org.acharneski.ant.client;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.acharneski.ant.client.Ant.Point;
@@ -55,6 +56,11 @@ public class AntFarm
   {
     ant.setFarm(this);
     ants.add(ant);
+  }
+
+  public void clear()
+  {
+    Arrays.fill(data, (byte)0);
   }
 
 }

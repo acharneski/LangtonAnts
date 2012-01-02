@@ -12,19 +12,22 @@ public class AwtAntFarm extends AntFarm implements Runnable
     this.frame = frame;
   }
 
+  int colors[][] = {
+      { 0, 0, 0 },
+      { 255, 255, 255 },
+      { 0, 255, 255 },
+      { 255, 0, 255 },
+      { 255, 255, 0 },
+      { 255, 0, 0 },
+      { 0, 255, 0 },
+      { 0, 0, 255 }
+  };
+
   @Override
   public Point set(Point p, byte b)
   {
     p = super.set(p, b);
-    int[] color;
-    if (((byte) 0) == b)
-    {
-      color = new int[] { 0, 0, 0 };
-    }
-    else
-    {
-      color = new int[] { 255, 255, 255 };
-    }
+    int[] color = colors[b];
     frame.image.getRaster().setPixel(p.x, p.y, color);
     frame.repaint();
     return p;
