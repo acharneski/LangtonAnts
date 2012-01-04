@@ -1,15 +1,33 @@
 package org.acharneski.ant;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 import org.acharneski.ant.client.AntFarm;
 import org.acharneski.ant.client.Ant.Point;
 
 public class AwtAntFarm extends AntFarm implements Runnable
 {
-  private final AntFrame frame;
-
-  AwtAntFarm(AntFrame frame)
+  public interface AwtAntFarmEvents
   {
-    this.frame = frame;
+    void onChange();
+  }
+  
+  public AwtAntFarmEvents events = null;
+  public final BufferedImage image;
+
+  AwtAntFarm()
+  {
+    this(800, 600);
+  }
+
+  public AwtAntFarm(int w, int h)
+  {
+    super(w,h);
+    image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
   }
 
   int colors[][] = {
@@ -28,9 +46,17 @@ public class AwtAntFarm extends AntFarm implements Runnable
   {
     p = super.set(p, b);
     int[] color = colors[b];
-    frame.image.getRaster().setPixel(p.x, p.y, color);
-    frame.repaint();
+    image.getRaster().setPixel(p.x, p.y, color);
+    if(null != events) events.onChange();
     return p;
+  }
+
+  public void run(int generations)
+  {
+    for(int i=0;i<generations;i++)
+    {
+      step();
+    }
   }
 
   @Override
@@ -47,5 +73,10 @@ public class AwtAntFarm extends AntFarm implements Runnable
   public void stop()
   {
     this.continueLoop = false;
+  }
+
+  public void write(File file) throws IOException
+  {
+    ImageIO.write(image, "jpeg", file);
   }
 }

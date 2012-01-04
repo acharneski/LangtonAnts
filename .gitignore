@@ -5,3 +5,4 @@ test-classes/
 classes/
 deploy/
 *.cache.*
+gwt/HyperAnt/site/

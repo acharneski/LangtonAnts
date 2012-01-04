@@ -4,6 +4,7 @@ import java.util.Random;
 
 import org.acharneski.ant.client.Ant;
 import org.acharneski.ant.client.RLCodeAnt;
+import org.acharneski.ant.client.Turnite;
 import org.junit.Test;
 
 public class TestAnt
@@ -11,8 +12,8 @@ public class TestAnt
   @Test
   public void test() throws InterruptedException
   {
-    final AntFrame frame = new AntFrame();
-    final AwtAntFarm farm = new AwtAntFarm(frame);
+    final AwtAntFarm farm = new AwtAntFarm();
+    final AntFrame frame = new AntFrame(farm, "Test");
     Random random = new Random();
     
     // Traditional langton ant
@@ -25,7 +26,7 @@ public class TestAnt
     //farm.add(new RLCodeAnt(400, 300, "RRLLR"));
     
     // Chaotically growing "marble"
-    farm.add(new RLCodeAnt(400, 300, "RLR"));
+    //farm.add(new RLCodeAnt(400, 300, "RLR"));
     
     // "Cyber-brain"... should be same as RRLL, but differing initial conditions!
     //farm.add(new RLCodeAnt(400, 300, "RLLR"));
@@ -46,9 +47,9 @@ public class TestAnt
     //farm.add(new RLCodeAnt(400, 300, "SRL"));
     
     // Corner-filling chaotic growth
-    farm.add(new RLCodeAnt(400, 300, "SRRLL"));
+    //farm.add(new RLCodeAnt(400, 300, "SRRLL"));
     
-    
+    farm.add(new Turnite(400, 300, "RL\nLR"));
     
     
     //farm.add(new Ant((int) (farm.width * random.nextDouble()), (int) (farm.height * random.nextDouble())));

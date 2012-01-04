@@ -4,10 +4,11 @@ import java.awt.Graphics;
 import java.awt.HeadlessException;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.awt.image.BufferedImage;
 import java.util.concurrent.Semaphore;
 
 import javax.swing.JFrame;
+
+import org.acharneski.ant.AwtAntFarm.AwtAntFarmEvents;
 
 @SuppressWarnings("serial")
 public final class AntFrame extends JFrame
@@ -52,17 +53,27 @@ public final class AntFrame extends JFrame
   }
 
   public final Semaphore onClose = new Semaphore(0);
-  public final BufferedImage image = new BufferedImage(800, 600, BufferedImage.TYPE_INT_RGB);
+  private AwtAntFarm farm;
 
-  AntFrame() throws HeadlessException
+  AntFrame(AwtAntFarm farm, String rule) throws HeadlessException
   {
-    super("Langton Ants");
+    super("Langton Ant: " + rule);
+    this.farm = farm;
+    this.farm.events = new AwtAntFarmEvents()
+    {
+      
+      @Override
+      public void onChange()
+      {
+        repaint();
+      }
+    };
     addWindowListener(new WindowEventHandler());
   }
 
   @Override
   public void paint(Graphics g)
   {
-    g.drawImage(image, 0, 0, null);
+    g.drawImage(farm.image, 0, 0, null);
   }
 }
