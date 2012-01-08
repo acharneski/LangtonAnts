@@ -22,26 +22,26 @@ public class Turnite extends Ant
   }
   
   List<List<Rule>> rules = new ArrayList<List<Turnite.Rule>>();
-  public String name;
+  public String code;
   int state = 0;
 
   public Turnite(int x, int y, String code)
   {
     super(x, y);
-    this.name = code;
-    Rule lastRule = null;
-    String[] lines = code.toUpperCase().split("\n");
+    this.code = code;
+    String[] lines = code.toUpperCase().split("\n|/");
     for(String line : lines)
     {
       ArrayList<Rule> innerList = new ArrayList<Turnite.Rule>();
-      for (char c : line.toCharArray())
+      char[] ruleChars = line.toCharArray();
+      for (char c : ruleChars)
       {
         Direction direction = Direction.getDirection(c);
-        lastRule = new Rule(direction, innerList.size() + 1, (rules.size() + 1) % lines.length);
-        innerList.add(lastRule);
+        int newRule = (rules.size() + 1) % lines.length;
+        int newColor = (innerList.size() + 1) % ruleChars.length;
+        innerList.add(new Rule(direction, newColor, newRule));
       }
       rules.add(innerList);
-      lastRule.newColor = 0;
     }
   }
 
@@ -50,7 +50,8 @@ public class Turnite extends Ant
   public void step()
   {
     byte oldColor = getFarm().get(point);
-    Rule rule = rules.get(state).get(oldColor % rules.size());
+    List<Rule> ruleSet = rules.get(state);
+    Rule rule = ruleSet.get(oldColor % ruleSet.size());
     state = rule.newRule;
     orientation = rule.direction.transform(orientation);
     getFarm().set(point, (byte) rule.newColor);
@@ -62,7 +63,7 @@ public class Turnite extends Ant
   {
     StringBuilder builder = new StringBuilder();
     //builder.append("RLCodeAnt [name=");
-    builder.append(name);
+    builder.append(code);
     //builder.append("]");
     return builder.toString();
   }

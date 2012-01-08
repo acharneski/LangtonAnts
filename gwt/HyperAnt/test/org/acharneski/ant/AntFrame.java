@@ -54,6 +54,8 @@ public final class AntFrame extends JFrame
 
   public final Semaphore onClose = new Semaphore(0);
   private AwtAntFarm farm;
+  private Semaphore onRepaint = new Semaphore(0);
+  public int speed = 40;
 
   AntFrame(AwtAntFarm farm, String rule) throws HeadlessException
   {
@@ -66,6 +68,13 @@ public final class AntFrame extends JFrame
       public void onChange()
       {
         repaint();
+        try
+        {
+          if(0 < speed) onRepaint.acquire();
+        } catch (InterruptedException e)
+        {
+          e.printStackTrace();
+        }
       }
     };
     addWindowListener(new WindowEventHandler());
@@ -75,5 +84,6 @@ public final class AntFrame extends JFrame
   public void paint(Graphics g)
   {
     g.drawImage(farm.image, 0, 0, null);
+    onRepaint.release(speed);
   }
 }

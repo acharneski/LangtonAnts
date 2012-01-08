@@ -2,18 +2,12 @@ package org.acharneski.ant.client;
 
 import org.acharneski.ant.client.Ant.Point;
 
+import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;
+import com.google.gwt.user.client.Timer;
 
 public class GwtAntFarm extends AntFarm
 {
-
-  private final Context2d context2d;
-
-  public GwtAntFarm(Context2d context2d2, int width, int height)
-  {
-    super(width, height);
-    this.context2d = context2d2;
-  }
 
   String colors[] = {
       "white",
@@ -25,6 +19,15 @@ public class GwtAntFarm extends AntFarm
       "orange",
       "yellow"
   };
+
+  private final Context2d context2d;
+  public int stepsBetweenClear = 1000;
+
+  public GwtAntFarm(Canvas canvas)
+  {
+    super(canvas.getCoordinateSpaceWidth(), canvas.getCoordinateSpaceHeight());
+    this.context2d = canvas.getContext2d();
+  }
 
   @Override
   public Point set(Point p, byte b)
@@ -42,7 +45,37 @@ public class GwtAntFarm extends AntFarm
     context2d.fillRect(0, 0, width, height);
     super.clear();
   }
+
+  int stepSize = 100;
+  double targetTime = 10.;
+  int stepsUntilClear = stepsBetweenClear;
   
-  
+  public Timer start()
+  {
+    Timer timer = new Timer()
+    {
+      @Override
+      public void run()
+      {
+        if(0 < stepsBetweenClear && 0 >= stepsUntilClear--)
+        {
+          stepsUntilClear = stepsBetweenClear;
+          GwtAntFarm.this.clear();
+        }
+        else
+        {
+          long start = System.currentTimeMillis();
+          for(int i=0;i<stepSize;i++)
+          {
+            GwtAntFarm.this.step();
+          }
+          double time = System.currentTimeMillis() - start;
+          stepSize *= targetTime / time;
+        }
+      }
+    };
+    timer.scheduleRepeating(10);
+    return timer;
+  }
 
 }

@@ -5,41 +5,92 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import org.acharneski.ant.client.Ant;
-import org.acharneski.ant.client.RLCodeAnt;
 import org.acharneski.ant.client.Turnite;
 import org.junit.Test;
 
 public class CreateAntZoo
 {
-  private File outDir;
+  public static class Dedup
+  {
+    public final int histogram[];
+
+    public Dedup(int[] histogram)
+    {
+      super();
+      this.histogram = histogram;
+    }
+
+    @Override
+    public int hashCode()
+    {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + Arrays.hashCode(histogram);
+      return result;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+      if (this == obj)
+        return true;
+      if (obj == null)
+        return false;
+      if (getClass() != obj.getClass())
+        return false;
+      Dedup other = (Dedup) obj;
+      if (!Arrays.equals(histogram, other.histogram))
+        return false;
+      return true;
+    }
+  }
+  
+  private File zooDir;
   private PrintStream htmlOut;
+  private final Set<Dedup> dedupSet = new HashSet<CreateAntZoo.Dedup>();
   int imageIdx = 0;
   final int width = 190;
   final int height = 210;
   final int generations = 100000;
+  boolean inlineSrc = true;
+  String reportName = "zoo";
+  File baseDir = new File("war/");
 
   @Test
   public void test() throws InterruptedException, IOException
   {
-    List<Ant> ants = generateAnts();
+    List<Turnite> ants = generateAnts();
     reportAnts(ants);
   }
 
-  private void reportAnts(List<Ant> ants) throws FileNotFoundException, IOException
+  private void reportAnts(List<Turnite> ants) throws FileNotFoundException, IOException
   {
-    this.outDir = new File("site");
-    outDir.mkdirs();
-    this.htmlOut = new PrintStream(new File(outDir, "zoo.html"));
+    if (!inlineSrc)
+    {
+      this.zooDir = new File(baseDir, reportName);
+      zooDir.mkdirs();
+    }
+    this.htmlOut = new PrintStream(new File(baseDir, reportName + ".html"));
     try
     {
-      htmlOut.println("<html>");
+      htmlOut.println("<!doctype html>" +
+      		"<html>" +
+      		"<head>\r\n" + 
+      		"    <meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">\r\n" + 
+      		"    <title>Langton Ants in HTML5</title>\r\n" + 
+      		"    <link type=\"text/css\" rel=\"stylesheet\" href=\"HyperAnt.css\" />\r\n" + 
+      		"    <script type=\"text/javascript\" language=\"javascript\" src=\"hyperant/hyperant.nocache.js\"></script>\r\n" + 
+      		"  </head>\r\n" + 
+      		"");
       htmlOut.println("<body>");
-      for(Ant ant : ants)
+      for(Turnite ant : ants)
       {
-        addAnt(ant);
+        addAnt(reportName, ant);
       }
       htmlOut.println("</body>");
       htmlOut.println("</html>");
@@ -50,25 +101,24 @@ public class CreateAntZoo
     }
   }
 
-  private List<Ant> generateAnts()
+  private List<Turnite> generateAnts()
   {
-    List<Ant> ants = new ArrayList<Ant>();
-    for(int s=1;s<=4;s++)
+    List<Turnite> ants = new ArrayList<Turnite>();
+    for(int states=1;states<=5;states++)
     {
-      for(int c=2;c<=3;c++)
+      for(int colors=2;colors<=5;colors++)
       {
-        if((s * c) <= 8)
+        if((states * colors) <= 8)
         {
-          addTurnites(ants, c, s);
+          addTurnites(ants, colors, states);
         }
       }
     }
     return ants;
   }
 
-  private void addTurnites(List<Ant> ants, int colors, int states)
+  private void addTurnites(List<Turnite> ants, int colors, int states)
   {
-    //Math.log(m)/Math.log(2)
     int m = (int) Math.pow(2, colors * states);
     for(int i=0;i<m;i++)
     {
@@ -88,7 +138,7 @@ public class CreateAntZoo
         }
         if(0 == (chars % colors) && source.hasNext(2))
         {
-          sb.append("\n");
+          sb.append("/");
         }
       }
       Turnite ant = new Turnite(width/2, height/2, sb.toString());
@@ -96,46 +146,28 @@ public class CreateAntZoo
     }
   }
 
-  private void addRLAnts(List<Ant> ants, int m)
-  {
-    for(int i=0;i<m;i++)
-    {
-      StringBuilder sb = new StringBuilder();
-      DataSource source = new DataSource(i, m);
-      while(source.hasNext(2))
-      {
-        if(0 == source.getNext(2))
-        {
-          sb.append("R");
-        }
-        else
-        {
-          sb.append("L");
-        }
-      }
-      RLCodeAnt ant = new RLCodeAnt(width/2, height/2, sb.toString());
-      ants.add(ant);
-    }
-  }
-
-  private void addAnt(Ant ant) throws IOException
+  private void addAnt(String zooName, Turnite ant) throws IOException
   {
     final AwtAntFarm farm = new AwtAntFarm(width, height);
     farm.add(ant);
     farm.run(generations);
-    String imageName = ++imageIdx + ".jpg";
-    farm.write(new File(outDir, imageName));
-    //displayModal(farm, rule);
-    htmlOut.println("<span>");
-    htmlOut.println(String.format("<img src=\"%s\" alt=\"%s\" />", imageName, ant.toString()));
-    htmlOut.println("</span>");
-  }
-
-  private void displayModal(final AwtAntFarm farm, String rule) throws InterruptedException
-  {
-    final AntFrame frame = new AntFrame(farm, rule);
-    frame.setSize(800, 600);
-    frame.setVisible(true);
-    frame.onClose.acquire();
+    double fillRatio = farm.fillRatio();
+    if(fillRatio < 0.01) return;
+    Dedup key = new Dedup(farm.histogram);
+    if(dedupSet.contains(key)) return;
+    dedupSet.add(key);
+    
+    String imageSrc;
+    if (inlineSrc)
+    {
+      imageSrc = farm.write(); 
+    }
+    else
+    {
+      String imageName = ++imageIdx + ".png";
+      farm.write(new File(zooDir, imageName));
+      imageSrc = zooName + "/" + imageName;
+    }
+    htmlOut.println(String.format("<img src=\"%s\" onclick=\"antPopup('%s')\" alt=\"%s\" />", imageSrc, ant.code, ant.toString()));
   }
 }

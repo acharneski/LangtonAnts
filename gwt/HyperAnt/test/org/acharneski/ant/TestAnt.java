@@ -20,7 +20,7 @@ public class TestAnt
     //farm.add(new Ant((int) (farm.width * random.nextDouble()), (int) (farm.height * random.nextDouble())));
     
     // Slow growing "brain"
-    farm.add(new RLCodeAnt(400, 300, "RRLL"));
+    //farm.add(new RLCodeAnt(400, 300, "RRLL"));
     
     // Very slow growing "cell" figure
     //farm.add(new RLCodeAnt(400, 300, "RRLLR"));
@@ -49,8 +49,11 @@ public class TestAnt
     // Corner-filling chaotic growth
     //farm.add(new RLCodeAnt(400, 300, "SRRLL"));
     
-    farm.add(new Turnite(400, 300, "RL\nLR"));
-    
+    //farm.add(new Turnite(400, 300, "RL\nLR\nLL\nLR"));
+    farm.add(new Turnite(400, 300, "LL\nRL\nRR\nLL\nLR"));
+    farm.add(new Turnite(400, 300, "RL\nLL\nLL\nLL\nLL"));
+    //farm.add(new Turnite(400, 300, "RR\nLL\nLL\nRR\nRL"));
+
     
     //farm.add(new Ant((int) (farm.width * random.nextDouble()), (int) (farm.height * random.nextDouble())));
     //farm.add(new Ant((int) (farm.width * random.nextDouble()), (int) (farm.height * random.nextDouble())));
