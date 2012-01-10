@@ -1,4 +1,7 @@
-package org.acharneski.ant.client;
+package org.simiacryptus.ant.gwt;
+
+import org.simiacryptus.ant.common.Ant;
+import org.simiacryptus.ant.common.Turnite;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -25,6 +28,14 @@ public class AntLib
     public AntDialog(int width, int height, Canvas canvas, String code)
     {
       this.canvas = canvas;
+      if(width > height)
+      {
+        width = height;
+      }
+      else
+      {
+        height = width;
+      }
       canvas.setWidth(width + "px");
       canvas.setHeight(height + "px");
       canvas.setCoordinateSpaceWidth(width);
@@ -90,6 +101,6 @@ public class AntLib
   }
 
   public static native void exportStaticMethod() /*-{
-		$wnd.antPopup = $entry(@org.acharneski.ant.client.AntLib::antPopup(Ljava/lang/String;));
+		$wnd.antPopup = $entry(@org.simiacryptus.ant.gwt.AntLib::antPopup(Ljava/lang/String;));
   }-*/;
 }

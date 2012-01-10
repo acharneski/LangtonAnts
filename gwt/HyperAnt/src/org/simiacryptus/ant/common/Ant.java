@@ -1,4 +1,4 @@
-package org.acharneski.ant.client;
+package org.simiacryptus.ant.common;
 
 
 public class Ant

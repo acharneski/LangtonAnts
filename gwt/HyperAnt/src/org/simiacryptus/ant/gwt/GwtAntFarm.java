@@ -1,6 +1,7 @@
-package org.acharneski.ant.client;
+package org.simiacryptus.ant.gwt;
 
-import org.acharneski.ant.client.Ant.Point;
+import org.simiacryptus.ant.common.Ant.Point;
+import org.simiacryptus.ant.common.AntFarm;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.canvas.dom.client.Context2d;

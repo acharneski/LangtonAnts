@@ -1,10 +1,10 @@
-package org.acharneski.ant.client;
+package org.simiacryptus.ant.common;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.acharneski.ant.client.Ant.Point;
+import org.simiacryptus.ant.common.Ant.Point;
 
 public class AntFarm
 {

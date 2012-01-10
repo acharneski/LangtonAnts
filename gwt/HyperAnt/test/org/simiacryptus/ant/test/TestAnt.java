@@ -1,11 +1,13 @@
-package org.acharneski.ant;
+package org.simiacryptus.ant.test;
 
 import java.util.Random;
 
-import org.acharneski.ant.client.Ant;
-import org.acharneski.ant.client.RLCodeAnt;
-import org.acharneski.ant.client.Turnite;
 import org.junit.Test;
+import org.simiacryptus.ant.awt.AntFrame;
+import org.simiacryptus.ant.awt.AwtAntFarm;
+import org.simiacryptus.ant.common.Ant;
+import org.simiacryptus.ant.common.RLCodeAnt;
+import org.simiacryptus.ant.common.Turnite;
 
 public class TestAnt
 {

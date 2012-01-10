@@ -1,12 +1,12 @@
-package org.acharneski.ant;
+package org.simiacryptus.ant.zoo;
 
-public class DataSource
+public class IndexedSequence
 {
 
   private int value;
   private int max;
 
-  public DataSource(int i, int m)
+  public IndexedSequence(int i, int m)
   {
     this.value = i;
     this.max = m;

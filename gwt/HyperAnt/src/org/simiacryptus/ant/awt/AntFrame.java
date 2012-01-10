@@ -1,4 +1,4 @@
-package org.acharneski.ant;
+package org.simiacryptus.ant.awt;
 
 import java.awt.Graphics;
 import java.awt.HeadlessException;
@@ -8,7 +8,7 @@ import java.util.concurrent.Semaphore;
 
 import javax.swing.JFrame;
 
-import org.acharneski.ant.AwtAntFarm.AwtAntFarmEvents;
+import org.simiacryptus.ant.awt.AwtAntFarm.AwtAntFarmEvents;
 
 @SuppressWarnings("serial")
 public final class AntFrame extends JFrame
@@ -57,7 +57,7 @@ public final class AntFrame extends JFrame
   private Semaphore onRepaint = new Semaphore(0);
   public int speed = 40;
 
-  AntFrame(AwtAntFarm farm, String rule) throws HeadlessException
+  public AntFrame(AwtAntFarm farm, String rule) throws HeadlessException
   {
     super("Langton Ant: " + rule);
     this.farm = farm;

@@ -1,8 +1,11 @@
-package org.acharneski.ant.client;
+package org.simiacryptus.ant.gwt;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import org.simiacryptus.ant.common.Ant;
+import org.simiacryptus.ant.common.Turnite;
 
 import com.google.gwt.canvas.client.Canvas;
 import com.google.gwt.core.client.EntryPoint;

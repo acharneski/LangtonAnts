@@ -1,4 +1,4 @@
-package org.acharneski.ant;
+package org.simiacryptus.ant.awt;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
@@ -7,8 +7,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import org.acharneski.ant.client.Ant.Point;
-import org.acharneski.ant.client.AntFarm;
+import org.simiacryptus.ant.common.AntFarm;
+import org.simiacryptus.ant.common.Ant.Point;
 
 public class AwtAntFarm extends AntFarm implements Runnable
 {
@@ -32,7 +32,7 @@ public class AwtAntFarm extends AntFarm implements Runnable
   };
   public final int histogram[] = new int[colors.length];
 
-  AwtAntFarm()
+  public AwtAntFarm()
   {
     this(800, 600);
   }

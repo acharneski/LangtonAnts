@@ -1,6 +1,6 @@
-package org.acharneski.ant.client;
+package org.simiacryptus.ant.common;
 
-import org.acharneski.ant.client.Ant.Orientation;
+import org.simiacryptus.ant.common.Ant.Orientation;
 
 public enum Direction
 {

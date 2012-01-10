@@ -6,3 +6,5 @@ classes/
 deploy/
 *.cache.*
 gwt/HyperAnt/site/
+gwt/HyperAnt/war/turnites.html
+gwt/HyperAnt/war/colors.html
